@@ -116,5 +116,7 @@ module.exports = {
     'quotes': 'off',
     'comma-dangle': 'off',
     'eol-last': 'off',
+    'brace-style': 'off',
+    'func-call-spacing': 'off',
   }
 }

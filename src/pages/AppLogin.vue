@@ -27,15 +27,14 @@
 <script lang="ts" setup>
 import { ref } from "vue";
 import { useRouter } from "vue-router";
+import { AuthManager } from '../services/auth.service';
 
 const email = ref();
 const password = ref();
 const router = useRouter();
 
-function onLogin() {
-  console.log(router)
-  router.push('/test');
-  return true;
+async function onLogin() {
+  await AuthManager.login(email.value, password.value, router);
 }
 </script>
 
