@@ -104,7 +104,7 @@ function onWrapperClick() {
     .rules__container--wrapper {
       background-color: #fff;
       border-radius: 4px;
-      padding: 2px 4px;
+      padding: 0px 4px;
 
       :deep(.rule) {
         &:last-child {

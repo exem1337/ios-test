@@ -9,40 +9,16 @@
   >
     <p>тесты</p>
     <div class="tests__container">
-      <q-btn 
-        color="primary add"
-        icon="add"
-      >
-        <span v-if="active">Создать тест</span>
-      </q-btn>
       <div class="tests__container--wrapper">
+        <q-btn 
+          color="primary add"
+          icon="add"
+        >
+          <span v-if="active">Создать тест</span>
+        </q-btn>
         <AppTestItem
           v-for="test in tests"
-          :key="test.id"
-          :test="test"
-          :active="active"
-        />
-        <AppTestItem
-          v-for="test in tests"
-          :key="test.id"
-          :test="test"
-          :active="active"
-        />
-        <AppTestItem
-          v-for="test in tests"
-          :key="test.id"
-          :test="test"
-          :active="active"
-        />
-        <AppTestItem
-          v-for="test in tests"
-          :key="test.id"
-          :test="test"
-          :active="active"
-        />
-        <AppTestItem
-          v-for="test in tests"
-          :key="test.id"
+          :key="test.Key"
           :test="test"
           :active="active"
         />
@@ -52,10 +28,10 @@
 </template>
 
 <script lang="ts" setup>
-import { TEST } from 'src/constants/tests.const';
 import { ITest } from 'src/models/test.model';
-import { ref } from 'vue';
+import { onBeforeMount, ref } from 'vue';
 import AppTestItem from 'components/AppTestItem.vue';
+import { api } from 'src/boot/axios';
 
 const props = defineProps<{
   active: boolean;
@@ -65,13 +41,17 @@ const emits = defineEmits<{
   (e: 'active'): void;
 }>();
 
-const tests = ref<Array<ITest>>(TEST);
+const tests = ref<Array<ITest>>();
 
 function onWrapperClick() {
   if (!props.active) {
     emits('active');
   }
 }
+
+onBeforeMount(async () => {
+  tests.value = await api.get('/getTestList').then((res) => res.data?.Data)
+})
 </script>
 
 <style lang="scss" scoped>
@@ -105,13 +85,13 @@ function onWrapperClick() {
     .tests__container {
       pointer-events: none;
 
-      .add {
-        width: 100%;
-        background-color: #eeeeee !important;
-        color: #616161 !important;
-      }
-
       &--wrapper {
+        .add {
+          width: 100%;
+          background-color: #eeeeee !important;
+          color: #616161 !important;
+        }
+
         margin-top: 4px;
         display: flex;
         flex-direction: column;
@@ -138,6 +118,11 @@ function onWrapperClick() {
         margin-top: 4px;
         display: flex;
         gap: 8px;
+        flex-wrap: wrap;
+
+        .add {
+          margin-top: 0;
+        }
       } 
     }
   }

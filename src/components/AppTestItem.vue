@@ -2,8 +2,9 @@
   <div 
     class="test-item"
     :class="{ 'active' : active }"
+    @click="onTestClick"
   >
-    <span v-if="active">{{ test.name }}</span>
+    <span v-if="active">{{ test.Name }}</span>
     <q-icon 
       v-else
       name="quiz" 
@@ -13,11 +14,18 @@
 
 <script lang="ts" setup>
 import { ITest } from 'src/models/test.model';
+import { useRouter } from 'vue-router';
 
-defineProps<{
+const props = defineProps<{
   test: ITest;
   active: boolean;
 }>();
+
+const router = useRouter();
+
+function onTestClick() {
+  router.push(`/expert/test/${props.test.Key}`);
+}
 </script>
 
 <style lang="scss" scoped>

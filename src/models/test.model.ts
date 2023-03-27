@@ -1,20 +1,24 @@
 export interface ITest {
-  id: number;
-  name: string;
-  questions: Array<ITestQuestion>;
+  Key: number;
+  Name: string;
+  Test_Type_Key: number;
+  Questions: Array<ITestQuestion>;
 }
 
 export interface ITestQuestion {
-  id: number;
-  questionName: string;
+  Key: number;
   questionPhoto?: string;  
-  answers: Array<ITestQuestionAnswer>;
+  Header: string;
+  Answer: Array<ITestQuestionAnswer>;
 }
 
 export interface ITestQuestionAnswer {
-  id: number;
-  name: string;
+  Key: number;
+  Text: string;
+  Question_Key: number;
+  Img_Key: number;
   photo?: string;
+  IsCorrect: boolean;
 }
 
 export interface ITestUserAnswer {

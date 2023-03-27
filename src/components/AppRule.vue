@@ -2,6 +2,7 @@
   <div 
     class="rule"
     :class="{ 'active' : active }"
+    @click="onRuleClick"
   >
     <div
       v-if="!active" 
@@ -26,16 +27,23 @@
 
 <script lang="ts" setup>
 import { IRule } from 'src/models/rules.model';
+import { useRouter } from 'vue-router';
 
 const props = defineProps<{
   rule: IRule;
   active: boolean;
 }>()
+
+const router = useRouter();
+
+function onRuleClick() {
+  router.push(`/expert/rules/${props.rule.id}`);
+}
 </script>
 
 <style lang="scss" scoped>
 .rule {
-  margin-top: 8px;
+  padding-top: 8px;
   padding-bottom: 8px;
   border-bottom: 1px solid #616161;
   margin-left: -4px;
@@ -64,6 +72,8 @@ const props = defineProps<{
     max-width: 108px;
     margin-left: auto;
     margin-right: auto;
+    padding-top: 0;
+    margin-top: 8px;
   }
 
   &:hover {
