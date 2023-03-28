@@ -1,10 +1,20 @@
 export interface IRule {
-  id: number;
-  statements: Array<IRuleStatement>;
-  result: string;
+  Key: number;
+  Attentiveness: string; 
+  Discipline_Level: string;
+  Perseverance: string;
+  Responsibility: string;
+  Result: string;
+  Self_Development: string;
+  Stress: string;
 }
 
-export interface IRuleStatement {
-  name: string,
-  value: string,
+export interface ICreateRule {
+  Attentiveness: string; 
+  Discipline_Level: string;
+  Perseverance: string;
+  Responsibility: string;
+  Result: string;
+  Self_Development: string;
+  Stress: string;
 }

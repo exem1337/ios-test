@@ -12,13 +12,20 @@
       <q-btn 
         color="primary add"
         icon="add"
+        @click="onRuleCreate"
       >
         <span v-if="active">Создать правило</span>
       </q-btn>
+      <AppDialog 
+        v-model="isShowModal" 
+        :options="modalProps" 
+        @close="isShowModal = false"
+        @ok="onCreateRule"
+      />
       <div class="rules__container--wrapper">
         <AppRule 
           v-for="rule in rules"
-          :key="rule.id"
+          :key="rule.Key"
           :rule="rule"
           :active="active"
         />
@@ -29,9 +36,12 @@
 
 <script lang="ts" setup>
 import AppRule from 'components/AppRule.vue';
-import { RULES } from 'src/constants/rules.const';
-import { IRule } from 'src/models/rules.model';
-import { ref } from 'vue';
+import { IModalProps } from '../models/modal.model';
+import { api } from 'src/boot/axios';
+import { ICreateRule, IRule } from 'src/models/rules.model';
+import { onBeforeMount, Ref, ref } from 'vue';
+import CreateRule from 'components/CreateRule.vue';
+import AppDialog from 'components/AppDialog.vue';
 
 const props = defineProps<{
   active: boolean;
@@ -41,13 +51,32 @@ const emits = defineEmits<{
   (e: 'active'): void;
 }>();
 
-const rules = ref<Array<IRule>>(RULES);
+const isShowModal = ref(false);
+const rules = ref<Array<IRule>>();
+const modalProps: IModalProps = {
+  component: CreateRule,
+  headerText: 'Создать правило',
+  okButtonText: 'Создать'
+}
 
 function onWrapperClick() {
   if (!props.active) {
     emits('active');
   }
 }
+
+function onRuleCreate() {
+  isShowModal.value = true;
+}
+
+async function onCreateRule(rule: Ref<ICreateRule>) {
+  console.log(rule.value.Attentiveness);
+  isShowModal.value = false;
+}
+
+onBeforeMount(async () => {
+  rules.value = await api.get('/getRuleList').then((res) => res.data.Data);
+})
 </script>
 
 <style lang="scss" scoped>
@@ -105,6 +134,9 @@ function onWrapperClick() {
       background-color: #fff;
       border-radius: 4px;
       padding: 0px 4px;
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: space-between;
 
       :deep(.rule) {
         &:last-child {

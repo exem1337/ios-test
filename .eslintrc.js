@@ -118,5 +118,6 @@ module.exports = {
     'eol-last': 'off',
     'brace-style': 'off',
     'func-call-spacing': 'off',
+    'indent': 'off',
   }
 }

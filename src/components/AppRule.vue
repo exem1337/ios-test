@@ -12,15 +12,15 @@
     </div>
     <div v-else>
       <span>ЕСЛИ</span>
-      <div
-        v-for="(statement, key) in rule.statements"
-        :key="key"
-      >
-        <span>{{ statement.name }}</span>
-        <span>{{ statement.value }}</span>
-        <span v-if="key !== rule.statements.length - 1">И</span>
+      <div>
+        <span>Внимательность: {{ rule.Attentiveness }}</span>
+        <span>Уровень усвоения дисциплины: {{ rule.Discipline_Level }}</span>
+        <span>Усидичивость: {{ rule.Perseverance }}</span>
+        <span>Ответственность: {{ rule.Responsibility }}</span>
+        <span>Стрессоустойчивость: {{ rule.Stress }}</span>
+        <span>Стремление к самообучению: {{ rule.Self_Development }}</span>
       </div>
-      <span>ТО {{ rule.result }}</span>
+      <span>ТО {{ rule.Result }}</span>
     </div>
   </div>
 </template>
@@ -37,20 +37,14 @@ const props = defineProps<{
 const router = useRouter();
 
 function onRuleClick() {
-  router.push(`/expert/rules/${props.rule.id}`);
+  router.push(`/expert/rules/${props.rule.Key}`);
 }
 </script>
 
 <style lang="scss" scoped>
 .rule {
-  padding-top: 8px;
-  padding-bottom: 8px;
-  border-bottom: 1px solid #616161;
-  margin-left: -4px;
-  margin-right: -4px;
   display: flex;
-  gap: 8px;
-  justify-content: space-between;
+  flex-direction: column;
   cursor: pointer;
 
   &:not(.active) {
@@ -96,19 +90,18 @@ function onRuleClick() {
 
   div {
     display: flex;
-    align-items: center;
+    flex-direction: column;
+    align-items: flex-start;
     color: #616161;
     transition: .3s display ease;
     overflow: hidden;
 
     span {
       white-space: nowrap;
-      &:first-child {
-        margin-right: 4px;
-      }
+      margin-right: 4px;
 
-      &:nth-child(3) {
-        margin-left: 8px;
+      &:last-child {
+        margin-right: 0;
       }
     }
   }
