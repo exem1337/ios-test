@@ -119,5 +119,6 @@ module.exports = {
     'brace-style': 'off',
     'func-call-spacing': 'off',
     'indent': 'off',
+    'no-unused-expressions': 'off'
   }
 }

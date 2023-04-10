@@ -71,6 +71,15 @@ function onRuleCreate() {
 
 async function onCreateRule(rule: Ref<ICreateRule>) {
   console.log(rule.value.Attentiveness);
+  await api.post('/postRule', {
+    disciplineLevel: rule.value.Discipline_Level,
+    selfDevelopment: rule.value.Self_Development,
+    responsibility: rule.value.Responsibility,
+    perseverance: rule.value.Perseverance,
+    attentiveness: rule.value.Attentiveness,
+    stress: rule.value.Stress,
+    result: rule.value.Result,
+  })
   isShowModal.value = false;
 }
 
@@ -136,7 +145,8 @@ onBeforeMount(async () => {
       padding: 0px 4px;
       display: flex;
       flex-wrap: wrap;
-      justify-content: space-between;
+      gap: 8px;
+      padding: 20px;
 
       :deep(.rule) {
         &:last-child {

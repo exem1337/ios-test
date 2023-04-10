@@ -14,7 +14,7 @@
 
 <script lang="ts" setup>
 import { ITest } from 'src/models/test.model';
-import { useRouter } from 'vue-router';
+import { useRoute, useRouter } from 'vue-router';
 
 const props = defineProps<{
   test: ITest;
@@ -22,9 +22,10 @@ const props = defineProps<{
 }>();
 
 const router = useRouter();
+const route = useRoute();
 
 function onTestClick() {
-  router.push(`/expert/test/${props.test.Key}`);
+  router.push(`/expert/${route.params.discipline}/test/${props.test.Key}`);
 }
 </script>
 

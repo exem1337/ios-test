@@ -1,22 +1,28 @@
 export interface ITest {
-  Key: number;
-  Name: string;
-  Test_Type_Key: number;
-  Questions: Array<ITestQuestion>;
+  Key?: number;
+  Name?: string;
+  Test_Type_Key?: number;
+  Questions?: Array<ITestQuestion>;
 }
 
 export interface ITestQuestion {
-  Key: number;
+  Key?: number;
   questionPhoto?: string;  
-  Header: string;
-  Answer: Array<ITestQuestionAnswer>;
+  Header?: string;
+  Answer?: Array<ITestQuestionAnswer>;
+  Img: IImg;
+}
+
+export interface IImg {
+  File: string | null;
+  Key: number;
 }
 
 export interface ITestQuestionAnswer {
-  Key: number;
+  Key?: number;
   Text: string;
-  Question_Key: number;
-  Img_Key: number;
+  Question_Key?: number;
+  Img_Key?: number;
   photo?: string;
   IsCorrect: boolean;
 }
@@ -29,4 +35,27 @@ export interface ITestUserAnswer {
 export interface ITestQuestionUserAnswer {
   id: number;
   answerId: number;
+}
+
+export interface ITestQuestionUpdate {
+  key: number;
+  header: string;
+  fileKey?: string | null;
+}
+
+export interface ITestAnswerUpdate {
+  text: string;
+  isCorrect: boolean;
+  key: number;
+  isNew?: boolean;
+}
+
+export interface IUpdateImage {
+  key: number;
+  fileKey: string;
+}
+
+export interface IAddImage {
+  model: any;
+  fileKey: string;
 }

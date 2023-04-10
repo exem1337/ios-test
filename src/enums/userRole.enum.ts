@@ -1,4 +1,4 @@
 export enum EUserRole {
-  Student = 'student',
-  Expert = 'expert',
+  Student = 'Студент',
+  Expert = 'Эксперт',
 }

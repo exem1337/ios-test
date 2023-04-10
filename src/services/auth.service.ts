@@ -1,21 +1,84 @@
+import { Store } from "pinia";
+import { Cookies, Notify } from "quasar";
+import { api } from "src/boot/axios";
 import { EUserRole } from "src/enums/userRole.enum";
+import { IBasedResponse } from "src/models/api.model";
+import { IAuthResponse, IUserInfoResponse } from "src/models/auth.model";
+import { IUser } from "src/models/user.model";
 import { useStore } from "src/stores/store";
 import { Router } from "vue-router";
 
 export class AuthManager {
-  static async login(email: string, password: string, router: Router): Promise<void> {
+  static async login(Email: string, Password: string, router: Router): Promise<void> {
     const store = useStore();
 
+    const user = await api.post<IBasedResponse<IAuthResponse>>('/login', {
+      Email,
+      Password
+    }).then((res) => res.data.Data);
+
+    const userInfo = await api.get<IBasedResponse<IUserInfoResponse>>(`/userInfo/${user?.UserData?.UserKey}`).then((res) => res.data.Data);
+    
+    if (!userInfo || !user) {
+      router.push('/');
+      
+      Notify.create({
+        color: 'blue-8',
+        message: 'Произошла ошибка при авторизации',
+        timeout: 1000,
+      })
+    }
+
+    Cookies.set('Token', user.Token);
+    Cookies.set('Verify', user.UserData.Verify);
+    Cookies.set('UserKey', user.UserData.UserKey.toString());
+
     store.setUser({
-      id: 0,
-      name: 'sas',
-      role: EUserRole.Expert,
+      id: userInfo.phys.Key,
+      name: `${userInfo.phys.Surname} ${userInfo.phys.Name} ${userInfo.phys.Patronymic}`,
+      role: user.UserData.Role,
     })
 
-    if (store.getUser?.role === EUserRole.Expert) {
+    if (store.getUser?.role.Name === EUserRole.Expert) {
       router.push('/expert');
     }
 
-    else router.push('/test');
+    else router.push('/disciplines');
   } 
+
+  static logout(store: Store<'user', { user: IUser }>, router: Router): void {
+    store.logout();
+    Cookies.remove('Token');
+    Cookies.remove('Verify');
+    router.push('/');
+  }
+
+  static async refresh(router: Router) {
+    const token = Cookies.get('Token');
+    const verify = Cookies.get('Verify');
+    const userKey = Cookies.get('UserKey');
+    const store = useStore();
+
+    if (token && verify && userKey) {
+      const userInfo = await api.get<IBasedResponse<IUserInfoResponse>>(`/userInfo/${userKey}`).then((res) => res.data.Data);
+    
+      if (!userInfo) {
+        router.push('/');
+        
+        Notify.create({
+          color: 'blue-8',
+          message: 'Произошла ошибка при авторизации',
+          timeout: 1000,
+        })
+
+        return;
+      }
+
+      store.setUser({
+        id: userInfo.phys.Key,
+        name: `${userInfo.phys.Surname} ${userInfo.phys.Name} ${userInfo.phys.Patronymic}`,
+        role: userInfo.phys.Role,
+      })
+    }
+  }
 }

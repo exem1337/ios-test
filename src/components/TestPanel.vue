@@ -13,6 +13,7 @@
         <q-btn 
           color="primary add"
           icon="add"
+          @click="onTestCreate"
         >
           <span v-if="active">Создать тест</span>
         </q-btn>
@@ -32,6 +33,7 @@ import { ITest } from 'src/models/test.model';
 import { onBeforeMount, ref } from 'vue';
 import AppTestItem from 'components/AppTestItem.vue';
 import { api } from 'src/boot/axios';
+import { useRoute, useRouter } from 'vue-router';
 
 const props = defineProps<{
   active: boolean;
@@ -42,6 +44,8 @@ const emits = defineEmits<{
 }>();
 
 const tests = ref<Array<ITest>>();
+const router = useRouter();
+const route = useRoute();
 
 function onWrapperClick() {
   if (!props.active) {
@@ -49,8 +53,13 @@ function onWrapperClick() {
   }
 }
 
+function onTestCreate() {
+  router.push(`/expert/${route.params.discipline}/test`);
+}
+
 onBeforeMount(async () => {
-  tests.value = await api.get('/getTestList').then((res) => res.data?.Data)
+  const testTypes = await api.get('/getDiffList').then((res) => res.data.Data?.filter((type) => type.Sh_Name === 'enter'));
+  tests.value = await api.get('/getTestList').then((res) => res.data?.Data?.filter((test) => testTypes.find((type) => type.Key === test.Test_Type_Key)));
 })
 </script>
 

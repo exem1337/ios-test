@@ -6,14 +6,20 @@ const routes: RouteRecordRaw[] = [
     component: () => import("layouts/MainLayout.vue"),
     children: [
       { path: "", component: () => import("pages/AppLogin.vue") },
-      { path: "/test", component: () => import("pages/TestCompletePage.vue") },
-      { path: "/expert", component: () => import("pages/ExpertPage.vue") },
+      { path: "/disciplines", component: () => import("pages/SelectDiscipline.vue") },
+      { path: "/expert", component: () => import("pages/SelectDiscipline.vue") },
+      { path: '/expert/:discipline', component: () => import('pages/ExpertPage.vue') },
+      { path: '/student/discipline/:id', component: () => import('pages/TestCompletePage.vue') },
       {
-        path: '/expert/rules/:id',
+        path: '/expert/:discipline/rules/:id',
         component: () => import('pages/RulesEdit.vue'),
       },
       {
-        path: '/expert/test/:id',
+        path: '/expert/:discipline/test/:id',
+        component: () => import('pages/TestEdit.vue'),
+      },
+      {
+        path: '/expert/:discipline/test',
         component: () => import('pages/TestEdit.vue'),
       },
     ],

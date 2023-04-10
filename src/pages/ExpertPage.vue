@@ -17,14 +17,18 @@
 <script lang="ts" setup>
 import RulesPanel from 'components/RulesPanel.vue';
 import TestPanel from 'components/TestPanel.vue';
-import { ref } from 'vue';
+import { useRouterGuard } from 'src/utils/routerGuard.util';
+import { onBeforeMount, ref } from 'vue';
 
 const isRulesActive = ref(true);
+
+onBeforeMount(() => (useRouterGuard()))
 </script>
 
 <style lang="scss" scoped>
 .expert {
   width: 100%;
+  margin-bottom: 20px;
 
   h4 {
     margin: 0 auto;

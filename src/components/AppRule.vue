@@ -11,23 +11,14 @@
       <q-icon name="text_fields" />
     </div>
     <div v-else>
-      <span>ЕСЛИ</span>
-      <div>
-        <span>Внимательность: {{ rule.Attentiveness }}</span>
-        <span>Уровень усвоения дисциплины: {{ rule.Discipline_Level }}</span>
-        <span>Усидичивость: {{ rule.Perseverance }}</span>
-        <span>Ответственность: {{ rule.Responsibility }}</span>
-        <span>Стрессоустойчивость: {{ rule.Stress }}</span>
-        <span>Стремление к самообучению: {{ rule.Self_Development }}</span>
-      </div>
-      <span>ТО {{ rule.Result }}</span>
+      <div class="rule__item">Результат: {{ rule.Result }} <br>Код правила: {{ rule.Key }}</div>
     </div>
   </div>
 </template>
 
 <script lang="ts" setup>
 import { IRule } from 'src/models/rules.model';
-import { useRouter } from 'vue-router';
+import { useRoute, useRouter } from 'vue-router';
 
 const props = defineProps<{
   rule: IRule;
@@ -35,9 +26,10 @@ const props = defineProps<{
 }>()
 
 const router = useRouter();
+const route = useRoute();
 
 function onRuleClick() {
-  router.push(`/expert/rules/${props.rule.Key}`);
+  router.push(`/expert/${route.params.discipline}/rules/${props.rule.Key}`);
 }
 </script>
 
@@ -74,35 +66,17 @@ function onRuleClick() {
     background-color: #fafafa;
   }
 
-  span {
+  .rule__item {
     font-size: 16px;
-    color: #616161;
+    color: #FFF;
+    border-radius: 4px;
     text-transform: uppercase;
+    background-color: #1976D2;
+    padding: 8px;
+    transition: .3s ease;
 
-    &:first-child {
-      margin-left: 4px;
-    }
-
-    &:last-child {
-      margin-right: 4px;
-    }
-  }
-
-  div {
-    display: flex;
-    flex-direction: column;
-    align-items: flex-start;
-    color: #616161;
-    transition: .3s display ease;
-    overflow: hidden;
-
-    span {
-      white-space: nowrap;
-      margin-right: 4px;
-
-      &:last-child {
-        margin-right: 0;
-      }
+    &:hover {
+      background-color: lighten(#1976D2, 5%);
     }
   }
 }

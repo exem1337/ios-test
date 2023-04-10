@@ -5,8 +5,18 @@
         Адаптивная обучающая система
       </span>
 
-      <div v-if="store?.getUser?.id != undefined">    
+      <div
+        class="user-info" 
+        v-if="store?.isLoggedIn"
+      >    
         <span>{{ store?.getUser?.name }}</span>
+        <q-btn
+          class="logout-btn"
+          outline
+          @click="onLogout"
+        >
+          Выйти
+        </q-btn>
       </div>
     </q-header>
 
@@ -18,13 +28,20 @@
 
 <script setup lang="ts">
 import { useMeta } from 'quasar';
+import { AuthManager } from 'src/services/auth.service';
 import { useStore } from 'src/stores/store';
+import { useRouter } from 'vue-router';
 
 useMeta({
   title: 'Войти в систему',
 })
 
 const store = useStore();
+const router = useRouter();
+
+function onLogout() {
+  AuthManager.logout(store, router);
+}
 </script>
 
 <style lang="scss" scoped>
@@ -36,6 +53,15 @@ const store = useStore();
 
   span {
     font-size: 24px;
+  }
+
+  .user-info {
+    display: flex;
+    align-items: center;
+  }
+
+  .logout-btn {
+    margin-left: 8px;
   }
 }
 </style>

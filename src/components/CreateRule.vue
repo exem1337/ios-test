@@ -5,57 +5,58 @@
       Усидичивость
       <q-select 
         v-model="perseveranceSelect"
-        :options="options" 
+        :options="perseveranceSelectOptions" 
       />
     </div>
     <div class="create-rule__statement">
       Внимательность
       <q-select 
         v-model="attentivenessSelect"
-        :options="options" 
+        :options="attentivenessSelectOptions" 
       />
     </div>
     <div class="create-rule__statement">
       Уровень усвоения дисциплины
       <q-select 
         v-model="disciplineLevelSelect"
-        :options="options" 
+        :options="disciplineLevelSelectOptions" 
       />
     </div>
     <div class="create-rule__statement">
       Ответственность
       <q-select 
         v-model="responsibilitySelect"
-        :options="options" 
+        :options="responsibilitySelectOptions" 
       />
     </div>
     <div class="create-rule__statement">
       Стрессоустойчивость
       <q-select 
         v-model="stressSelect"
-        :options="options" 
+        :options="stressSelectOptions" 
       />
     </div>
     <div class="create-rule__statement">
       Стремление к самообучению
       <q-select 
         v-model="selfDevelopmentSelect"
-        :options="options" 
+        :options="selfDevelopmentSelectOptions" 
       />
     </div>
     <div class="create-rule__statement">
       ТО результат
       <q-select 
         v-model="resultSelect"
-        :options="options" 
+        :options="resultSelectOptions" 
       />
     </div>
   </div>
 </template>
 
 <script lang="ts" setup>
+import { api } from 'src/boot/axios';
 import { ICreateRule } from 'src/models/rules.model';
-import { computed, ref, watch } from 'vue';
+import { computed, onBeforeMount, ref, watch } from 'vue';
 
 defineProps<{
   modelValue: ICreateRule;
@@ -66,13 +67,19 @@ const emits = defineEmits<{
   (e: 'valid', value: boolean): void;
 }>()
 
-const options = ['Низкий', 'Средний'];
+const perseveranceSelectOptions = ref();
 const perseveranceSelect = ref();
+const attentivenessSelectOptions = ref();
 const attentivenessSelect = ref();
+const disciplineLevelSelectOptions = ref();
 const disciplineLevelSelect = ref();
+const responsibilitySelectOptions = ref();
 const responsibilitySelect = ref();
+const stressSelectOptions = ref();
 const stressSelect = ref();
+const selfDevelopmentSelectOptions = ref();
 const selfDevelopmentSelect = ref();
+const resultSelectOptions = ref();
 const resultSelect = ref();
 
 const rule = computed<ICreateRule>(() => {
@@ -111,6 +118,16 @@ watch(
     );
   }
 )
+
+onBeforeMount(async () => {
+  attentivenessSelectOptions.value = await api.get(`/getTermLevels/Attentiveness`).then((res) => res.data.Data);
+  perseveranceSelectOptions.value = await api.get(`/getTermLevels/Perseverance`).then((res) => res.data.Data);
+  disciplineLevelSelectOptions.value = await api.get(`/getTermLevels/Discipline_Level`).then((res) => res.data.Data);
+  responsibilitySelectOptions.value = await api.get(`/getTermLevels/Responsibility`).then((res) => res.data.Data);
+  stressSelectOptions.value = await api.get(`/getTermLevels/Stress`).then((res) => res.data.Data);
+  selfDevelopmentSelectOptions.value = await api.get(`/getTermLevels/Self_Development`).then((res) => res.data.Data);
+  resultSelectOptions.value = await api.get(`/getTermLevels/Result`).then((res) => res.data.Data);
+})
 </script>
 
 <style lang="scss" scoped>
