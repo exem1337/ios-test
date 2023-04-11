@@ -18,6 +18,7 @@
       >
         <span>{{ discipline.Name }}</span>
         <span>{{ discipline.ShName }}</span>
+        <p v-if="isCompleted(discipline.Key)">пройдено</p>
       </q-card>
     </div>
   </div>
@@ -34,7 +35,7 @@ import { useRouter } from 'vue-router';
 const disciplines = ref();
 const router = useRouter();
 const store = useStore();
-const completeDisciplines = ref([]);
+const completeDisciplines = ref<Array<number>>([]);
 
 function onChooseDiscipline(key: number) {
   router.push(store.isExpert ? `/expert/${key}` : `/student/discipline/${key}`);
@@ -95,8 +96,18 @@ onBeforeMount(async () => {
       font-weight: 500;
     }
 
+    p {
+      margin-bottom: 0;
+      text-align: right;
+    }
+
     &:hover {
       background-color: lighten(#1976D2, 5%);
+    }
+
+    &.completed {
+      background-color: lighten(#1976D2, 15%);
+      pointer-events: none;
     }
   }
 }

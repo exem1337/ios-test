@@ -48,7 +48,7 @@
 
 <script lang="ts" setup>
 import { api } from 'src/boot/axios';
-import { ITest, ITestUserAnswer } from 'src/models/test.model';
+import { ITest } from 'src/models/test.model';
 import { ref } from 'vue';
 
 const props = defineProps<{
