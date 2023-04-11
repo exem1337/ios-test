@@ -20,6 +20,7 @@
         v-if="options.component" 
         :is="options.component"
         v-model="componentModelValue"
+        :componentProps="componentProps"
         @valid="isValid = $event"
       />
       <slot name="content" />
@@ -47,6 +48,7 @@ import { ref, watch } from 'vue';
 const props = defineProps<{
   modelValue: boolean;
   options: IModalProps;
+  componentProps?: any;
 }>();
 
 const emits = defineEmits<{

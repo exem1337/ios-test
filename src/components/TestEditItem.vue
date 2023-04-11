@@ -223,21 +223,6 @@ watch(
   (newValue, oldValue) => (onChangeCorrectivity(newValue, oldValue)),
 )
 
-// {
-//   testName? // если поменялось название теста
-//   questions?: [ // если поменялись вопросы
-//     {
-//       key: //id вопроса
-//       name? // если поменялось название вопроса
-//       answers?: [ //если что то поменялось в ответах
-//         key: //id ответа
-//         text?: // если поменялся текст вопроса
-//         isCorrect?: // если поменялся его isCorrect
-//       ]
-//     }
-//   ]
-// }
-
 onBeforeMount(async () => {
   if (props.question.Img?.File) {
     const file = await FileService.getFile(props.question.Img.File);

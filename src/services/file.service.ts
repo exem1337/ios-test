@@ -55,7 +55,7 @@ export class FileService {
         headers: {
           'Content-Type': 'multipart/form-data',
         },
-        baseURL: 'http://localhost:8080',
+        baseURL: '19ivt.ru:8080',
       }
     ).then((res) => res.data.salt)
 

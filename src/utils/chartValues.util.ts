@@ -26,3 +26,19 @@ export function getChartValues(data: IRuleDots): IRuleDots {
     y
   }
 }
+
+export function getResultValues(res: number) {
+  const arr = [];
+
+  for (let i = 0; i < res; i++) {
+    arr.push(0);
+  }
+
+  arr.push(1);
+
+  for (let i = arr.length + 1; i < 100; i++) {
+    arr.push(0);
+  }
+
+  return arr;
+}
