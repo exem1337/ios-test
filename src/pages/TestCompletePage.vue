@@ -9,7 +9,7 @@
 <script lang="ts" setup>
 import { useMeta } from 'quasar';
 import { onBeforeMount, ref } from 'vue';
-import { useRoute } from 'vue-router';
+import { useRoute, useRouter } from 'vue-router';
 import AppTestWrapper from 'components/AppTestWrapper.vue';
 import AppLoader from 'components/AppLoader.vue';
 import { ITestResponse } from 'src/models/test.model';
@@ -22,9 +22,10 @@ useMeta({
 const tests = ref<Array<ITestResponse>>([]);
 const route = useRoute();
 const isDataLoading = ref(true);
+const router = useRouter();
 
 onBeforeMount(async () => {
-  tests.value = await TestService.getStudentTests(Number(route.params.id));
+  tests.value = await TestService.getStudentTests(Number(route.params.id), router);
 
   isDataLoading.value = false;
 })
