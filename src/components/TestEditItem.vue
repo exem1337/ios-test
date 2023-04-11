@@ -93,7 +93,7 @@ const emits = defineEmits<{
 
 const questionName = ref(props.question.Header);
 const clonedQuestion = ref<ITestQuestion>(cloneDeep(props.question));
-const selectedAnswerKey = ref(props.question.Answer?.find((ans) => ans.IsCorrect)?.Key || props.question.Answer?.[0]?.Key);
+const selectedAnswerKey = ref();
 const fileUploaderRef = ref();
 const isPreventUploadFiles = ref(true);
 
@@ -243,6 +243,16 @@ onBeforeMount(async () => {
     const file = await FileService.getFile(props.question.Img.File);
     fileUploaderRef.value.addFiles([file]);
   }
+
+  const selectedAnswer = props.question.Answer?.find((ans) => ans.IsCorrect) || props.question.Answer?.[0];
+  selectedAnswerKey.value = selectedAnswer?.Key;
+  console.log(selectedAnswer)
+  emits('updateAnswer', {
+    text: selectedAnswer.Text,
+    key: selectedAnswer.Key,
+    isCorrect: 1,
+    isNew: selectedAnswer.isNew,
+  })
 
   nextTick(() => (isPreventUploadFiles.value = false));
 })
