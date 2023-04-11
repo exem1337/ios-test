@@ -34,6 +34,15 @@ export class FileService {
     return myFile;
   }
 
+  static async getFileBase64(salt: string): Promise<string> {
+    return await api.get(
+      `/cdn/get/${salt}`, 
+      {
+        baseURL: 'http://localhost:8080',
+      }
+    ).then((res) => res.data)
+  }
+
   static async uploadFile(file: Array<File>): Promise<string> {
     const formData = new FormData();
     const fileToUpload = file[0];

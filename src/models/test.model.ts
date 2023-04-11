@@ -5,6 +5,19 @@ export interface ITest {
   Questions?: Array<ITestQuestion>;
 }
 
+export interface ITestResponse {
+  Disciplines: Array<number>;
+  Name: string;
+  Questions: Array<ITestQuestion>;
+  Type: ITestType;
+}
+
+export interface ITestType {
+  Key: number;
+  Sh_Name: string;
+  TName: string;
+}
+
 export interface ITestQuestion {
   Key?: number;
   questionPhoto?: string;  
