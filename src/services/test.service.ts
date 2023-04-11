@@ -17,6 +17,8 @@ export class TestService {
         message: 'У данной дисциплины нет входного теста',
         timeout: 1000,
       })
+
+      return;
     }
 
     const testTypes = await api.get('/getDiffList').then((res) => res.data.Data?.filter((type) => type.Sh_Name === 'enter'));
