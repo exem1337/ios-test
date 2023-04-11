@@ -2,7 +2,7 @@
   <q-layout view="lHh Lpr lFf">
     <q-header elevated>
       <span>
-        Адаптивная обучающая система
+        Определение статуса обучаемого
       </span>
 
       <div

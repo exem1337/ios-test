@@ -17,7 +17,20 @@ export class AuthManager {
       Password
     }).then((res) => res.data.Data);
 
-    const userInfo = await api.get<IBasedResponse<IUserInfoResponse>>(`/userInfo/${user?.UserData?.UserKey}`).then((res) => res.data.Data);
+    Cookies.set('Token', user.Token);
+    Cookies.set('Verify', user.UserData.Verify);
+    Cookies.set('UserKey', user.UserData.UserKey.toString());
+
+    const userInfo = await api.get<IBasedResponse<IUserInfoResponse>>(
+      `/userInfo/${user?.UserData?.UserKey}`,
+      {
+        headers: {
+          Token: Cookies.get('Token'),
+          Verify: Cookies.get('Verify'),
+          UserKey: Cookies.get('UserKey'),
+        }
+      }
+    ).then((res) => res.data.Data);
     
     if (!userInfo || !user) {
       router.push('/');
@@ -28,10 +41,6 @@ export class AuthManager {
         timeout: 1000,
       })
     }
-
-    Cookies.set('Token', user.Token);
-    Cookies.set('Verify', user.UserData.Verify);
-    Cookies.set('UserKey', user.UserData.UserKey.toString());
 
     store.setUser({
       id: userInfo.phys.Key,

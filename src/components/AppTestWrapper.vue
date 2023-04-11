@@ -43,13 +43,8 @@ function onReturnToDisciplines() {
 }
 
 async function onTestCompleted(correct: number) {
-  const result = {
-    x: correct,
-    y: props.tests[currentTest.value].Questions?.length
-  }
-
   await api.post('/submitResult', {
-    result,
+    result: `${correct}/${props.tests[currentTest.value].Questions?.length}`,
     physKey: store.getUser.id,
     testKey: props.tests[currentTest.value].Key,
     discipKey: Number(route.params.id),
