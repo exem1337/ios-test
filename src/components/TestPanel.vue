@@ -63,7 +63,10 @@ onBeforeMount(async () => {
   const test = await api.get(`/getDisciplines?by=key&id=${route.params.discipline}`).then((res) => res.data.Data?.[0]?.Entry_Test_Key);
   if (test) {
     const testResponse = await api.get(`/getTest/${test}`).then((res) => res.data.Data);
-    tests.value?.push(testResponse);
+    tests.value?.push({
+      ...testResponse,
+      Key: test,
+    });
   }
 })
 </script>
