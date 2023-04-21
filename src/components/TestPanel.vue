@@ -60,7 +60,7 @@ function onTestCreate() {
 onBeforeMount(async () => {
   const testTypes = await api.get('/getDiffList').then((res) => res.data.Data?.filter((type) => type.Sh_Name === 'enter' && type.Key !== 26));
   tests.value = await api.get('/getTestList').then((res) => res.data?.Data?.filter((test) => testTypes.find((type) => type.Key === test.Test_Type_Key)));
-  const test = await api.get(`/getDisciplines?by=key&id=${route.params.id}`).then((res) => res.data.Data?.Entry_Test_Key);
+  const test = await api.get(`/getDisciplines?by=key&id=${route.params.discipline}`).then((res) => res.data.Data?.Entry_Test_Key);
   if (test) {
     const testResponse = await api.get(`/getTest/${test}`).then((res) => res.data.Data);
     tests.value?.push(testResponse);
