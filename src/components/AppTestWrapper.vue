@@ -86,7 +86,7 @@ async function onTestCompleted(correct: number) {
 }
 
 async function getBannerData() {
-  currentStatus.value = await api.get(`/getFuzzyResult?physKey=${store.getUser.id}&disciplineKey=${route.params.id}`);
+  currentStatus.value = await api.get(`/getFuzzyStatus?physKey=${store.getUser.id}&disciplineKey=${route.params.id}`);
   console.log(currentStatus.value)
   const ruleGraphs = [];
 
