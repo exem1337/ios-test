@@ -23,8 +23,6 @@ const api = axios.create({
   }
 })
 
-api.defaults
-
 export default boot(({ app }) => {
   // for use inside Vue files (Options API) through this.$axios and this.$api
 
