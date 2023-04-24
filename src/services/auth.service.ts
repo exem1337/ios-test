@@ -48,6 +48,8 @@ export class AuthManager {
       role: user.UserData.Role,
     })
 
+    this.refreshApi();
+    
     if (store.getUser?.role.Name === EUserRole.Expert) {
       router.push('/expert');
     }
@@ -89,6 +91,8 @@ export class AuthManager {
         role: userInfo.phys.Role,
       })
     }
+
+    this.refreshApi();
   }
 
   static useAuthGuard(router: Router, route: RouteLocationNormalizedLoaded) {
@@ -101,6 +105,14 @@ export class AuthManager {
 
     if (route?.path === '/') {
       router.push('/disciplines')
+    }
+  }
+
+  static refreshApi() {
+    api.defaults.headers = {
+      Token: Cookies.get('Token'),
+      Verify: Cookies.get('Verify'),
+      UserKey: Cookies.get('UserKey'),
     }
   }
 }
