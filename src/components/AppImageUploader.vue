@@ -26,8 +26,13 @@ const emits = defineEmits<{
 }>()
 
 const uploaderRef = ref();
+const isPreventUploadFiles = ref(true);
 
-async function onAddImage(file: Array<File>) {  
+async function onAddImage(file: Array<File>) { 
+  if (isPreventUploadFiles.value) {
+    return;
+  }
+  
   const salt = await FileService.uploadFile(file);
 
   emits('add', {
@@ -48,6 +53,6 @@ onBeforeMount(async () => {
     const file = await FileService.getFile(props.file);
     uploaderRef.value.addFiles([file]);
   }
-  console.log('props.model', props.model)
+  isPreventUploadFiles.value = false;
 })
 </script>

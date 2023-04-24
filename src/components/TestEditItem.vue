@@ -48,6 +48,7 @@
           <AppImageUploader
             :file="answer.Img?.File"
             :model="answer"
+            :prevent-upload="isPreventUploadFiles"
             @add="onAddAnswerImage"
             @remove="onRemoveAnswerImage"  
           />
@@ -105,7 +106,7 @@ async function onAddQuestionImage(file: Array<File>) {
   if (isPreventUploadFiles.value) {
     return;
   }
-  
+
   const salt = await FileService.uploadFile(file);
 
   emits('updateQuestionImage', {
@@ -126,7 +127,6 @@ function onRemoveQuestionImage() {
 }
 
 function onAddAnswerImage(event) {
-  console.log(event)
   emits('updateAnswer', {
     text: event.model.Text,
     key: event.model.Key,
@@ -231,7 +231,6 @@ onBeforeMount(async () => {
 
   const selectedAnswer = props.question.Answer?.find((ans) => ans.IsCorrect) || props.question.Answer?.[0];
   selectedAnswerKey.value = selectedAnswer?.Key;
-  console.log(selectedAnswer)
   emits('updateAnswer', {
     text: selectedAnswer.Text,
     key: selectedAnswer.Key,

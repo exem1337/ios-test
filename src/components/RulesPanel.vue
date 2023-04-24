@@ -70,7 +70,6 @@ function onRuleCreate() {
 }
 
 async function onCreateRule(rule: Ref<ICreateRule>) {
-  console.log(rule.value.Attentiveness);
   await api.post('/postRule', {
     disciplineLevel: rule.value.Discipline_Level,
     selfDevelopment: rule.value.Self_Development,

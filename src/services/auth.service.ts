@@ -6,7 +6,7 @@ import { IBasedResponse } from "src/models/api.model";
 import { IAuthResponse, IUserInfoResponse } from "src/models/auth.model";
 import { IUser } from "src/models/user.model";
 import { useStore } from "src/stores/store";
-import { Router } from "vue-router";
+import { RouteLocationNormalizedLoaded, Router } from "vue-router";
 
 export class AuthManager {
   static async login(Email: string, Password: string, router: Router): Promise<void> {
@@ -88,6 +88,19 @@ export class AuthManager {
         name: `${userInfo.phys.Surname} ${userInfo.phys.Name} ${userInfo.phys.Patronymic}`,
         role: userInfo.phys.Role,
       })
+    }
+  }
+
+  static useAuthGuard(router: Router, route: RouteLocationNormalizedLoaded) {
+    const store = useStore();
+
+    if (!store.isLoggedIn) {
+      router.push('/');
+      return;
+    }
+
+    if (route?.path === '/') {
+      router.push('/disciplines')
     }
   }
 }

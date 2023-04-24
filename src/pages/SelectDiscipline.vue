@@ -28,13 +28,15 @@
 import { Cookies } from 'quasar';
 import { api } from 'src/boot/axios';
 import { IBasedResponse } from 'src/models/api.model';
+import { AuthManager } from 'src/services/auth.service';
 import { useStore } from 'src/stores/store';
 import { onBeforeMount, ref } from 'vue';
-import { useRouter } from 'vue-router';
+import { useRoute, useRouter } from 'vue-router';
 
 const disciplines = ref();
 const router = useRouter();
 const store = useStore();
+const route = useRoute();
 const completeDisciplines = ref<Array<number>>([]);
 
 function onChooseDiscipline(key: number) {
@@ -42,10 +44,13 @@ function onChooseDiscipline(key: number) {
 }
 
 function isCompleted(key: number) {
-  return completeDisciplines.value.includes(key);
+  return completeDisciplines.value?.includes(key);
 }
 
 onBeforeMount(async () => {
+  await AuthManager.refresh(router);
+  AuthManager.useAuthGuard(router, route);
+
   disciplines.value = await api.get('/getMyDisciplines', {
     headers: {
       userkey: Cookies.get('UserKey'),

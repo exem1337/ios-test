@@ -57,6 +57,7 @@ import { api } from 'src/boot/axios';
 import { useRoute, useRouter } from 'vue-router';
 import { useRouterGuard } from 'src/utils/routerGuard.util';
 import { useMeta } from 'quasar';
+import { AuthManager } from 'src/services/auth.service';
 
 const test = ref<ITest>({
   Questions: [],
@@ -126,12 +127,9 @@ function onUpdateQuestionImage(data: IUpdateImage) {
 }
 
 function onUpdateQuestionName(question: ITestQuestionUpdate) {
-  console.log(question)
-
   if (isCreate.value) {
     const foundQuestion = test.value.Questions?.find((q) => question.key === q.Key);
     if (foundQuestion) {
-      console.log(foundQuestion)
       foundQuestion.Header = question.header;
     }
     return;
@@ -233,7 +231,7 @@ async function onSave() {
     const testId = await api.post(url, {
       name: testName.value,
       difficulty: selectedTestType.value.Key
-    }).then((res) => res.data.Data.Key);
+    }).then((res) => res.data.Data);
 
     test.value.Questions?.forEach(async (question) => {
       await api.post('/submitQuestion', {
@@ -338,6 +336,9 @@ watch(
 )
 
 onBeforeMount(async () => {
+  await AuthManager.refresh(router);
+  AuthManager.useAuthGuard(router, route);
+
   useRouterGuard();
   selectOptions.value = await api.get('/getDiffList').then((res) => res.data.Data?.filter((el) => el.Sh_Name === 'enter'));
   if (route.params.id) {

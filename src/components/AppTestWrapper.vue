@@ -11,7 +11,7 @@
     class="complete-banner"
   >
     Вы прошли Тестирование <br>
-    Ващ результат: {{ prop?.resultTerm }}
+    Ваш результат: {{ prop?.resultTerm }}
     <q-btn
       color="primary"
       @click="isShowModal = true"
@@ -44,6 +44,7 @@ import { useRoute, useRouter } from 'vue-router';
 import FuzzyResult from 'components/FuzzyResult.vue';
 import AppDialog from 'components/AppDialog.vue'
 import { IModalProps } from 'src/models/modal.model';
+import { FUZZY_RESULT } from 'src/constants/fuzzyResult.const';
 
 const props = defineProps<{
   tests: Array<ITest>
@@ -86,12 +87,11 @@ async function onTestCompleted(correct: number) {
 }
 
 async function getBannerData() {
-  currentStatus.value = await api.get(`/getFuzzyStatus?physKey=${store.getUser.id}&disciplineKey=${route.params.id}`);
-  console.log(currentStatus.value)
+  currentStatus.value = await api.get(`/getFuzzyStatus?physKey=${store.getUser.id}&disciplineKey=${route.params.id}`).then((res) => res.data.Data);
+
   const ruleGraphs = [];
 
   const rules = Object.keys(currentStatus.value).filter((key) => key.includes('RuleId'));
-  console.log(rules)
 
   rules.forEach((rule) => {
     ruleGraphs.push({ x: [...currentStatus.value[rule][0]], y: [...currentStatus.value[rule][1]] });
@@ -110,7 +110,7 @@ async function getBannerData() {
 .complete-banner {
   padding: 8px;
   margin: 0 auto;
-  margin-top: calc(50% - 300px);
+  margin-top: calc(50% - 450px);
   display: flex;
   flex-direction: column;
   height: 150px;

@@ -17,12 +17,20 @@
 <script lang="ts" setup>
 import RulesPanel from 'components/RulesPanel.vue';
 import TestPanel from 'components/TestPanel.vue';
+import { AuthManager } from 'src/services/auth.service';
 import { useRouterGuard } from 'src/utils/routerGuard.util';
 import { onBeforeMount, ref } from 'vue';
+import { useRoute, useRouter } from 'vue-router';
 
 const isRulesActive = ref(true);
+const router = useRouter()
+const route = useRoute();
 
-onBeforeMount(() => (useRouterGuard()))
+onBeforeMount(async () => {
+  await AuthManager.refresh(router);
+  AuthManager.useAuthGuard(router, route);
+  useRouterGuard()
+})
 </script>
 
 <style lang="scss" scoped>

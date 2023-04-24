@@ -8,7 +8,7 @@ export const useStore = defineStore('user', {
   }),
   getters: {
     getUser: (state) => state.user,
-    isExpert: (state) => state.user.role.Name === EUserRole.Expert,
+    isExpert: (state) => state.user.role?.Name === EUserRole.Expert,
     isLoggedIn: (state) => !!state.user.id,
   },
   actions: {

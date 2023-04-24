@@ -86,6 +86,7 @@ import { onBeforeMount, ref } from 'vue';
 import { useRoute, useRouter } from 'vue-router';
 import { IRule, IRuleDotsResponse } from '../models/rules.model';
 import { useRouterGuard } from 'src/utils/routerGuard.util';
+import { AuthManager } from 'src/services/auth.service';
 
 const rule = ref<IRule>();
 const route = useRoute();
@@ -99,6 +100,8 @@ async function onSave() {
 }
 
 onBeforeMount(async () => {
+  await AuthManager.refresh(router);
+  AuthManager.useAuthGuard(router, route);
   useRouterGuard();
   const res = await api.get(`/getRule/${route.params.id}`)?.then((res) => res.data.Data)
   rule.value = res.rule;

@@ -14,6 +14,7 @@ import AppTestWrapper from 'components/AppTestWrapper.vue';
 import AppLoader from 'components/AppLoader.vue';
 import { ITestResponse } from 'src/models/test.model';
 import { TestService } from 'src/services/test.service';
+import { AuthManager } from 'src/services/auth.service';
 
 useMeta({
   title: 'Тестирование'
@@ -25,6 +26,9 @@ const isDataLoading = ref(true);
 const router = useRouter();
 
 onBeforeMount(async () => {
+  await AuthManager.refresh(router);
+  AuthManager.useAuthGuard(router, route);
+
   tests.value = await TestService.getStudentTests(Number(route.params.id), router);
 
   isDataLoading.value = false;

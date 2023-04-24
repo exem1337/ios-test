@@ -13,8 +13,18 @@
         <q-btn 
           color="primary add"
           icon="add"
+          :disable="tests?.length === 6"
           @click="onTestCreate"
         >
+          <q-tooltip
+            v-if="tests?.length === 6"
+            anchor="top middle" 
+            self="bottom middle" 
+            :offset="[10, 10]"
+            class="bg-primary"
+          >
+            Все тесты были добавлены
+          </q-tooltip>
           <span v-if="active">Создать тест</span>
         </q-btn>
         <AppTestItem

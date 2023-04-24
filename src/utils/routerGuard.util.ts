@@ -7,11 +7,11 @@ export function useRouterGuard() {
   const store = useStore();
   const router = useRouter();
 
-  if (route.path.includes('/expert') && store.user?.role?.Name === EUserRole.Student) {
+  if (route?.path?.includes('/expert') && store.user?.role?.Name === EUserRole.Student) {
     router.push('/');
   }
 
-  if (route.path.includes('/proceed') && store.user?.role?.Name === EUserRole.Expert) {
+  if (route?.path?.includes('/proceed') && store.user?.role?.Name === EUserRole.Expert) {
     router.push('/expert');
   }
 }
