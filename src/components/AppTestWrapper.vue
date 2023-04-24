@@ -14,6 +14,7 @@
     Ваш результат: {{ prop?.resultTerm }}
     <q-btn
       color="primary"
+      :disable="isErrorBanner"
       @click="isShowModal = true"
     >
       Подробнее
@@ -44,7 +45,6 @@ import { useRoute, useRouter } from 'vue-router';
 import FuzzyResult from 'components/FuzzyResult.vue';
 import AppDialog from 'components/AppDialog.vue'
 import { IModalProps } from 'src/models/modal.model';
-import { FUZZY_RESULT } from 'src/constants/fuzzyResult.const';
 
 const props = defineProps<{
   tests: Array<ITest>
@@ -64,6 +64,7 @@ const route = useRoute();
 const router = useRouter();
 const currentStatus = ref();
 const prop = ref();
+const isErrorBanner = ref(false);
 
 function onReturnToDisciplines() {
   router.push('/disciplines');
@@ -88,6 +89,12 @@ async function onTestCompleted(correct: number) {
 
 async function getBannerData() {
   currentStatus.value = await api.get(`/getFuzzyStatus?physKey=${store.getUser.id}&disciplineKey=${route.params.id}`).then((res) => res.data.Data);
+  if (!currentStatus.value) {
+    isErrorBanner.value = true;
+    return;
+  }
+
+  isErrorBanner.value = false;
 
   const ruleGraphs = [];
 
