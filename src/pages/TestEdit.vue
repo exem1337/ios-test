@@ -6,6 +6,7 @@
       label="Тип теста"
       v-model="selectedTestType"
       :options="selectOptions" 
+      :disable="isSelectDisabled"
       :option-label="(option) => option.TName"
     />
 
@@ -42,6 +43,7 @@
       class="save"
       color="primary"
       icon="save"
+      :disable="isSaveBtnDisabled"
       @click="onSave"
     >
       Сохранить изменения
@@ -51,7 +53,7 @@
 
 <script lang="ts" setup>
 import { ITest, ITestAnswerUpdate, ITestQuestionUpdate, IUpdateImage } from 'src/models/test.model';
-import { onBeforeMount, ref, watch, nextTick } from 'vue';
+import { onBeforeMount, ref, watch, nextTick, computed } from 'vue';
 import TestEditItem from 'components/TestEditItem.vue';
 import { api } from 'src/boot/axios';
 import { useRoute, useRouter } from 'vue-router';
@@ -78,6 +80,15 @@ const isCreate = ref(false);
 const newQuestions = ref([]);
 const newAnswers = ref([]);
 const deletedQuestions = ref<Array<number>>([]);
+const isSelectDisabled = ref(false);
+const isSaveBtnDisabled = computed(() => 
+  updatedQuestionNames.value.some((name) => !name.header) || 
+  updatedAnswers.value.some((ans) => !ans.text) || 
+  !selectedTestType.value ||
+  !testName.value || 
+  newAnswers.value.some((ans) => !ans.Text) ||
+  newQuestions.value.some((question) => !question.Answer?.length || !question.Header || question.Answer?.some((ans) => !ans.Text))
+);  
 
 function onAddQuestion(): void {
   const question = {
@@ -340,12 +351,29 @@ onBeforeMount(async () => {
   AuthManager.useAuthGuard(router, route);
 
   useRouterGuard();
-  selectOptions.value = await api.get('/getDiffList').then((res) => res.data.Data?.filter((el) => el.Sh_Name === 'enter'));
+  
+  const testTypes = await api.get('/getDiffList').then((res) => res.data.Data?.filter((type) => type.Sh_Name === 'enter' && type.Key !== 26));
+  const testsResponse = await api.get('/getTestList').then((res) => res.data?.Data?.filter((test) => testTypes.find((type) => type.Key === test.Test_Type_Key)));
+  const testResponse = await api.get(`/getDisciplines?by=key&id=${route.params.discipline}`).then((res) => res.data.Data?.[0]?.Entry_Test_Key);
+  if (testResponse) {
+    const resp = await api.get(`/getTest/${testResponse}`).then((res) => res.data.Data);
+    testsResponse.push({
+      ...resp,
+      Key: testResponse,
+    });
+  }
+  console.log(testsResponse)
+  selectOptions.value = await api.get('/getDiffList').then((res) => res.data.Data?.filter((el) => el.Sh_Name === 'enter' && !testsResponse.find((test) => test.Test_Type_Key === el.Key)));
+  
   if (route.params.id) {
     test.value = await api.get(`/getTest/${route.params.id}?GetCorrect=true`).then((res) => res.data.Data);
+    isSelectDisabled.value = true;
+    
     if (test.value === undefined) {
       initEmptyTest();
+      isSelectDisabled.value = false;
     }
+
     testName.value = test?.value?.Name;
     pageHeader.value = `Редактирование теста: ${test?.value?.Name}`
     useMeta({
