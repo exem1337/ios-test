@@ -65,7 +65,7 @@ const rightAnswers = ref(0);
 
 async function onAnswer() {
   const result = await api.get(`/validateAnswer?questionKey=${props.test.Questions?.[currentQuestionKey.value].Key}&answerKey=${currentAnswer.value}`)
-  .then((res) => res.data.Data.Correct);
+  .then((res) => res.data.Data.CorrectFloat);
 
   if (result) {
     rightAnswers.value++;
